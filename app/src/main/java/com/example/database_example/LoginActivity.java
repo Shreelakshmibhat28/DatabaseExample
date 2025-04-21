@@ -32,30 +32,38 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirmPassword);
 
-        String username = userName.getText().toString();
-        String email = userEmail.getText().toString();
-        String pwd = password.getText().toString();
-        String conPwd = confirmPassword.getText().toString();
 
-        if(username.isEmpty() || email.isEmpty() || pwd.isEmpty() || conPwd.isEmpty()){
-            Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(!pwd.equals(conPwd)){
-            Toast.makeText(this, "Password do not match", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String username = userName.getText().toString();
+                String email = userEmail.getText().toString();
+                String pwd = password.getText().toString();
+                String conPwd = confirmPassword.getText().toString();
+
+                if(username.isEmpty() || email.isEmpty() || pwd.isEmpty() || conPwd.isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!pwd.equals(conPwd)) {
+                    Toast.makeText(LoginActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("flag",true);
+                editor.putString("uname",username);
+                editor.putString("email",email);
                 editor.apply();
 
                 Intent iHome = new Intent(LoginActivity.this, HomeActivity.class);
+                iHome.putExtra("uname",username);
+                iHome.putExtra("email",email);
                 startActivity(iHome);
             }
         });
